@@ -2,9 +2,9 @@ package infusion.mobile.coroutines;
 
 public class Users(
 
-    val page: Integer,
-    val per_page: Integer,
-    val total: Integer,
-    val total_pages: Integer,
+    val page: Int,
+    val per_page: Int,
+    val total: Int,
+    val total_pages: Int,
     val data: List<Data>
 )

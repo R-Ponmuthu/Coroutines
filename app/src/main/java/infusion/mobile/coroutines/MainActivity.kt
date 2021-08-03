@@ -24,23 +24,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel = ViewModelProviders.of(this).get(DataViewModel::class.java)
-        viewModel.loadData()
 
         dataRecyclerView.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = dataAdapter
         }
 
-        observeViewModel()
+        startButton.setOnClickListener {
+
+            viewModel.getData()
+
+            observeViewModel()
+        }
     }
 
     private fun observeViewModel() {
-        viewModel.datas.observe(this, { data ->
-            data?.let {
-                dataRecyclerView.visibility = View.VISIBLE
-                dataAdapter.updateData(it)
-            }
-        })
 
         viewModel.progress.observe(this, { isLoading ->
             isLoading?.let {
@@ -50,13 +48,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        viewModel.datas.observe(this, { data ->
+            data?.let {
+                dataRecyclerView.visibility = View.VISIBLE
+                progressBar.visibility =View.GONE
+                dataAdapter.updateData(it)
+            }
+        })
     }
 
     class DataAdapter(var datas: ArrayList<Data>): RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
 
-        fun updateData(newUsers: List<Data>) {
+        fun updateData(users: List<Data>) {
             datas.clear()
-            datas.addAll(newUsers)
+            datas.addAll(users)
             notifyDataSetChanged()
         }
 
@@ -65,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         override fun getItemCount() = datas.size
+
         override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
             holder.bind(datas[position])
         }
