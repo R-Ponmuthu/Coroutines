@@ -18,33 +18,37 @@ class DataViewModel : ViewModel() {
 
         progress.value = true
 
-        job = GlobalScope.launch(Dispatchers.Main) {
-            progress.value = true
-            try {
-                val response = userService.getUsers(3)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        datas.value = response.body()?.data
-                        progress.value = false
-                    }
-                }
-            } catch (ex: Exception) {
-                Log.d(TAG, ex.toString())
-            } finally {
-                progress.value = false
-            }
-        }
-
-//        job = CoroutineScope(Dispatchers.Main).launch {
-//            val response = userService.getUsers()
-//            withContext(Dispatchers.Main) {
-//                if (response.isSuccessful) {
-//                    datas.value = response.body()?.data
-//                    progress.value = false
+//        job = GlobalScope.launch(Dispatchers.Main) {
+//            progress.value = true
+//            try {
+//                val response = userService.getUsers(3)
+//                withContext(Dispatchers.Main) {
+//                    if (response.isSuccessful) {
+//                        datas.value = response.body()?.data
+//                        progress.value = false
+//                    }
 //                }
+//            } catch (ex: Exception) {
+//                Log.d(TAG, ex.toString())
+//            } finally {
+//                progress.value = false
 //            }
 //        }
-//        progress.value = false
+
+        job = CoroutineScope(Dispatchers.IO).launch {
+
+            progress.postValue(true)
+
+            val response = userService.getUsers(3)
+
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    datas.postValue(response.body()?.data)
+                    progress.postValue(false)
+                }
+            }
+        }
+        progress.postValue(false)
     }
 
     override fun onCleared() {
