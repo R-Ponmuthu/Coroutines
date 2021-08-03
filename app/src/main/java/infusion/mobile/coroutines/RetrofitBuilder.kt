@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitBuilder {
 
-    private val URL = "https://https://reqres.in/api/users"
+    private val URL = "https://https://reqres.in/api/"
 
     public fun getUserService(): UserService {
         return Retrofit.Builder()

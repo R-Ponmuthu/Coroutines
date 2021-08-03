@@ -10,6 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.data_item.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,25 +27,25 @@ class MainActivity : AppCompatActivity() {
         viewModel.loadData()
 
         dataRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this)
+            layoutManager = LinearLayoutManager(applicationContext)
             adapter = dataAdapter
         }
+
         observeViewModel()
     }
 
     private fun observeViewModel() {
-        viewModel.datas.observe(this, Observer { countries ->
-            countries?.let {
+        viewModel.datas.observe(this, { data ->
+            data?.let {
                 dataRecyclerView.visibility = View.VISIBLE
-                dataAdapter.updateCountries(it)
+                dataAdapter.updateData(it)
             }
         })
 
-        viewModel.progress.observe(this, Observer { isLoading ->
+        viewModel.progress.observe(this, { isLoading ->
             isLoading?.let {
-                loadingView.visibility = if (it) View.VISIBLE else View.GONE
+                progressBar.visibility = if (it) View.VISIBLE else View.GONE
                 if (it) {
-
                     dataRecyclerView.visibility = View.GONE
                 }
             }
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     class DataAdapter(var datas: ArrayList<Data>): RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
 
-        fun updateCountries(newUsers: List<Data>) {
+        fun updateData(newUsers: List<Data>) {
             datas.clear()
             datas.addAll(newUsers)
             notifyDataSetChanged()
@@ -77,7 +80,8 @@ class MainActivity : AppCompatActivity() {
                 firstName.text = data.first_name
                 lastName.text=data.last_name
                 email.text = data.email
-                imageView.loadImage(data.avatar)
+
+                Picasso.get().load(data.avatar).into(imageView)
             }
         }
     }

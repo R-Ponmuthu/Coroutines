@@ -13,10 +13,10 @@ class DataViewModel: ViewModel() {
     val progress = MutableLiveData<Boolean>()
 
     fun loadData() {
-        fetchDatas()
+        getData()
     }
 
-    private fun fetchDatas() {
+    private fun getData() {
         progress.value = true
         job = CoroutineScope(Dispatchers.IO).launch {
             val response = userService.getUsers()

@@ -11,13 +11,18 @@
         android:id="@+id/dataRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/startButton" />
+        android:layout_above="@+id/startButton"
+        android:visibility="gone"/>
 
-    <ImageView
-        android:id="@+id/progressImage"
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:indeterminateDrawable="@drawable/drawable_progress"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/startButton"
